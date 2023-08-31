@@ -105,29 +105,26 @@ if __name__ == "__main__":
 
     # Get input
     with open(path) as file:
-        
         input = file.read().strip()
-        entries = input.split("\n")
-        # Define the regular expression pattern to extract the coordinates
-        coord_extract_pattern = r"x=(-?\d+),\s*y=(-?\d+)"
+    
+    entries = input.split("\n")
+    # Define the regular expression pattern to extract the coordinates
+    coord_extract_pattern = r"x=(-?\d+),\s*y=(-?\d+)"
+    
+    ### Part 1
+    important_row = 10
+    solve_part_1(important_row, entries)
+    ### Part 2
+    search_space = SearchSpace(0)
+    for (i, entry) in enumerate(entries):
+        matches = re.findall(coord_extract_pattern, entry)
+    
+        sensor = (int(matches[0][0]), int(matches[0][1]))
+        beacon = (int(matches[1][0]), int(matches[1][1]))
+        dist = manhattan_distance(sensor, beacon)
         
-        ### Part 1
-        important_row = 10
-        solve_part_1(important_row, entries)
-
-        ### Part 2
-        search_space = SearchSpace(0)
-        for (i, entry) in enumerate(entries):
-            matches = re.findall(coord_extract_pattern, entry)
-        
-            sensor = (int(matches[0][0]), int(matches[0][1]))
-            beacon = (int(matches[1][0]), int(matches[1][1]))
-
-            dist = manhattan_distance(sensor, beacon)
-            
-            # print(f"Processing entry {i} with dist {dist}")
-            # time.sleep(3)
-
-            search_space.process(sensor, dist)
-        
-        search_space.solve_part_2()
+        # print(f"Processing entry {i} with dist {dist}")
+        # time.sleep(3)
+        search_space.process(sensor, dist)
+    
+    search_space.solve_part_2()
