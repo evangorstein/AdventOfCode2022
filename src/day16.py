@@ -50,7 +50,7 @@ def gen_options(dist: dict[str, dict[str, int]], all_valve_names: set[str],
                 cur: str, opened: dict[str, int], time: int):
     """
     Iterator over all possible options.
-    Doing DFS over a complete graph.
+    Doing DFS over the complete graph of the valves.
     Each option is a dictionary whose keys are the names of all valves opened for that option. 
     The values are the time remaining when that valve was opened.
     For example, an option could be {"AA" : 30, "BB" : 15}
@@ -82,12 +82,19 @@ if __name__ == "__main__":
     dist = floid_warshall(valves)
     nz_valve_names = set([v for v in valves if valves[v].flow_rate > 0])
     all_options = gen_options(dist, nz_valve_names, "AA", {}, 30)
+    # part 1
     best = max(get_score(option, valves) for option in all_options)
-    print(best)
-
-
-
-
-    
-     
-
+    print(f"Solution to part 1 is {best}")
+    # part 2 
+    best_options = {} # dict with keys = frozenset of opened valves, values = best score for that set
+    for option in gen_options(dist, nz_valve_names, "AA", {}, 26):
+        visited = frozenset(option.keys())
+        score = get_score(option, valves) 
+        best_options[visited] = max(score, best_options.get(visited, 0))
+    # get best sum of two scores for disjoint sets
+    best = 0
+    for x in best_options:
+        for y in best_options:
+            if x.isdisjoint(y):
+                best = max(best, best_options[x] + best_options[y])
+    print(f"Solution to part 2 is {best}")
