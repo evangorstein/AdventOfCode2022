@@ -21,6 +21,9 @@ def solve_part1(puzzle_input: list[str]):
     return sa
     
 def solve_part2(puzzle_input: list[str]):
+    """
+    Followed the approach of https://github.com/silentw0lf/advent_of_code_2022/blob/main/18/solve.py
+    """
 
     cubes = [tuple(map(int, line.split(","))) for line in puzzle_input]
     max_coords = tuple(max(cube[i] for cube in cubes) + 1 for i in range(3))
